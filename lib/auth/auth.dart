@@ -4,9 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 class Auth {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-
   //create user object based on firebaseuser
-  OurUser? _userFromFirebaseUser(User user){
+  OurUser? _userFromFirebaseUser(User user) {
     return user != null ? OurUser(uid: user.uid) : null;
   }
 
@@ -18,5 +17,12 @@ class Auth {
     } catch (e) {
       print(e);
     }
+  }
+
+  Stream<OurUser?> get user {
+    return _auth
+        .authStateChanges()
+        .map((eachUser) => _userFromFirebaseUser(eachUser!));
+        // .map(_userFromFirebaseUser);
   }
 }
