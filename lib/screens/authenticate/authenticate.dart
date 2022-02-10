@@ -1,3 +1,4 @@
+import 'package:coffee/screens/authenticate/register.dart';
 import 'package:coffee/screens/authenticate/signin.dart';
 import 'package:flutter/material.dart';
 
@@ -9,10 +10,19 @@ class Authenticate extends StatefulWidget {
 }
 
 class _AuthenticateState extends State<Authenticate> {
+  bool displaySignIn = true;
+  void togglePage() {
+    setState(() {
+      displaySignIn = !displaySignIn;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: SignIn(),
-    );
+    if (displaySignIn) {
+      return SignIn(togglePage: togglePage);
+    } else {
+      return Register(togglePage: togglePage);
+    }
   }
 }

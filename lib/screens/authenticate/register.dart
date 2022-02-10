@@ -1,17 +1,16 @@
 import 'package:coffee/auth/auth.dart';
-import 'package:coffee/models/user.dart';
 import 'package:flutter/material.dart';
 
-class SignIn extends StatefulWidget {
+class Register extends StatefulWidget {
   final Function togglePage;
 
-  SignIn({Key? key, required this.togglePage}) : super(key: key);
+  const Register({Key? key, required this.togglePage}) : super(key: key);
 
   @override
-  _SignInState createState() => _SignInState();
+  _RegisterState createState() => _RegisterState();
 }
 
-class _SignInState extends State<SignIn> {
+class _RegisterState extends State<Register> {
   final Auth _auth = Auth();
 
   String email = "";
@@ -24,14 +23,14 @@ class _SignInState extends State<SignIn> {
       appBar: AppBar(
         backgroundColor: Colors.brown[400],
         elevation: 0.0,
-        title: Text("Signin"),
+        title: Text("Signup"),
         actions: [
           TextButton.icon(
               onPressed: () {
                 widget.togglePage();
               },
               icon: Icon(Icons.person),
-              label: Text("Register"))
+              label: Text("Signin"))
         ],
       ),
       body: Padding(
@@ -64,12 +63,9 @@ class _SignInState extends State<SignIn> {
               height: 20.0,
             ),
             ElevatedButton(
-              onPressed: () async {
-                print(email);
-                print(pass);
-              },
+              onPressed: () async {},
               child: Text(
-                "Signin",
+                "Signup",
                 style: TextStyle(color: Colors.white),
               ),
               style: ElevatedButton.styleFrom(

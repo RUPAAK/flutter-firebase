@@ -15,6 +15,16 @@ class Auth {
       User? user = result.user;
       return _userFromFirebaseUser(user!);
     } catch (e) {
+      print("Failed to signupannom");
+      print(e);
+    }
+  }
+
+  Future signout() async {
+    try {
+      return await _auth.signOut();
+    } catch (e) {
+      print("Falied to logout");
       print(e);
     }
   }
@@ -23,6 +33,6 @@ class Auth {
     return _auth
         .authStateChanges()
         .map((eachUser) => _userFromFirebaseUser(eachUser!));
-        // .map(_userFromFirebaseUser);
+    // .map(_userFromFirebaseUser);
   }
 }
