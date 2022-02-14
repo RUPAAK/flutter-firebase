@@ -20,6 +20,18 @@ class Auth {
     }
   }
 
+  Future signUpEmailPass(String email, String pass) async {
+    try {
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
+          email: email, password: pass);
+      User? user = result.user;
+      return _userFromFirebaseUser(user!);
+    } catch (e) {
+      print("Failed to signup");
+      print(e);
+    }
+  }
+
   Future signout() async {
     try {
       return await _auth.signOut();
