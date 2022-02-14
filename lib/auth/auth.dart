@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:coffee/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -29,6 +31,19 @@ class Auth {
     } catch (e) {
       print("Failed to signup");
       print(e);
+    }
+  }
+
+  Future signInEmailPass(String email, String pass) async {
+      try {
+      UserCredential result =
+          await _auth.signInWithEmailAndPassword(email: email, password: pass);
+      User? user = result.user;
+      return _userFromFirebaseUser(user!);
+    } catch (e) {
+      print("Failed to signup");
+      print(e);
+      return null;
     }
   }
 

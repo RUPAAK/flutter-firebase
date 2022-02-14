@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:coffee/auth/auth.dart';
 import 'package:coffee/models/user.dart';
 import 'package:flutter/material.dart';
+
+import '../../shared/constants.dart';
 
 class SignIn extends StatefulWidget {
   final Function togglePage;
@@ -13,9 +17,11 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
   final Auth _auth = Auth();
+  final _formKey = GlobalKey<FormState>();
 
   String email = "";
   String pass = "";
+  String error = "";
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +44,14 @@ class _SignInState extends State<SignIn> {
         padding: const EdgeInsets.symmetric(horizontal: 30.0),
         child: Container(
             child: Form(
+          key: _formKey,
           child: Column(children: [
             SizedBox(
               height: 20.0,
             ),
             TextFormField(
+              validator: (val) => val!.isEmpty ? "Enter a email" : null,
+              decoration: textInputDecoration.copyWith(hintText: "Email"),
               onChanged: (value) {
                 setState(() {
                   email = value;
@@ -53,6 +62,8 @@ class _SignInState extends State<SignIn> {
               height: 20.0,
             ),
             TextFormField(
+              decoration: textInputDecoration.copyWith(hintText: "Pass"),
+              validator: (val) => val!.length < 6 ? "Enter valid pass" : null,
               obscureText: true,
               onChanged: (value) {
                 setState(() {
@@ -65,8 +76,15 @@ class _SignInState extends State<SignIn> {
             ),
             ElevatedButton(
               onPressed: () async {
-                print(email);
-                print(pass);
+                if (_formKey.currentState!.validate()) {
+                  dynamic result = await _auth.signInEmailPass(email, pass);
+                  print(result);
+                  if (result == null) {
+                    setState(() {
+                      error = "Please supply valid email";
+                    });
+                  }
+                }
               },
               child: Text(
                 "Signin",
@@ -75,6 +93,13 @@ class _SignInState extends State<SignIn> {
               style: ElevatedButton.styleFrom(
                 primary: Colors.pink[400],
               ),
+            ),
+            SizedBox(
+              height: 20.0,
+            ),
+            Text(
+              error,
+              style: TextStyle(color: Colors.red, fontSize: 14.0),
             )
           ]),
         )),
