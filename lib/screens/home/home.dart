@@ -1,5 +1,9 @@
-import 'package:coffee/auth/auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coffee/screens/home/coffee-list.dart';
+import 'package:coffee/service/auth.dart';
+import 'package:coffee/service/database.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatelessWidget {
   final Auth _auth = Auth();
@@ -8,27 +12,34 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.brown[50],
-      appBar: AppBar(
-        title: Text("Coffee"),
-        backgroundColor: Colors.brown[400],
-        elevation: 0.0,
-        actions: [
-          TextButton.icon(
-              onPressed: () async {
-                await _auth.signout();
-              },
-              icon: Icon(
-                Icons.person,
-                color: Colors.black,
-              ),
-              label: Text(
-                "Logout",
-                style: TextStyle(color: Colors.black),
-              ))
-        ],
-      ),
-    );
+    return StreamProvider<QuerySnapshot?>.value(
+        value: DatabaseService().coffee,
+        initialData: null,
+        catchError: (_, __) {},
+        builder: (context, snapshot) {
+          return Scaffold(
+            backgroundColor: Colors.brown[50],
+            appBar: AppBar(
+              title: Text("Coffee"),
+              backgroundColor: Colors.brown[400],
+              elevation: 0.0,
+              actions: [
+                TextButton.icon(
+                    onPressed: () async {
+                      await _auth.signout();
+                    },
+                    icon: Icon(
+                      Icons.person,
+                      color: Colors.black,
+                    ),
+                    label: Text(
+                      "Logout",
+                      style: TextStyle(color: Colors.black),
+                    ))
+              ],
+            ),
+            body: CoffeeList(),
+          );
+        });
   }
 }

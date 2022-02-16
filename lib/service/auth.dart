@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:coffee/models/user.dart';
+import 'package:coffee/service/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Auth {
@@ -27,6 +28,9 @@ class Auth {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: pass);
       User? user = result.user;
+
+      await DatabaseService(uid: user!.uid)
+          .updateUserData('0', "Latest Member", 100);
       return _userFromFirebaseUser(user!);
     } catch (e) {
       print("Failed to signup");
@@ -35,7 +39,7 @@ class Auth {
   }
 
   Future signInEmailPass(String email, String pass) async {
-      try {
+    try {
       UserCredential result =
           await _auth.signInWithEmailAndPassword(email: email, password: pass);
       User? user = result.user;

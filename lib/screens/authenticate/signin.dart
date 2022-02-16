@@ -1,7 +1,7 @@
 import 'dart:developer';
 
-import 'package:coffee/auth/auth.dart';
 import 'package:coffee/models/user.dart';
+import 'package:coffee/service/auth.dart';
 import 'package:coffee/shared/loading.dart';
 import 'package:flutter/material.dart';
 

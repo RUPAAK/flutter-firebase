@@ -1,4 +1,4 @@
-import 'package:coffee/auth/auth.dart';
+import 'package:coffee/service/auth.dart';
 import 'package:coffee/shared/constants.dart';
 import 'package:coffee/shared/loading.dart';
 import 'package:flutter/material.dart';

@@ -1,6 +1,6 @@
-import 'package:coffee/auth/auth.dart';
 import 'package:coffee/models/user.dart';
 import 'package:coffee/screens/wrapper.dart';
+import 'package:coffee/service/auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
