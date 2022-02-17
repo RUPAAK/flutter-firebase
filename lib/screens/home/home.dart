@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coffee/models/coffee.dart';
 import 'package:coffee/screens/home/coffee-list.dart';
 import 'package:coffee/service/auth.dart';
 import 'package:coffee/service/database.dart';
@@ -12,7 +13,7 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<QuerySnapshot?>.value(
+    return StreamProvider<List<Coffee>?>.value(
         value: DatabaseService().coffee,
         initialData: null,
         catchError: (_, __) {},
