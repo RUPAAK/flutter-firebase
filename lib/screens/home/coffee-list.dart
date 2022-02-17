@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee/models/coffee.dart';
+import 'package:coffee/screens/home/coffee-tile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,12 +19,9 @@ class _CoffeeListState extends State<CoffeeList> {
     if (coffees == null) {
       return Container();
     } else {
-      coffees.forEach((element) {
-        print(element.name);
-        print(element.sugars);
-        print(element.strength);
+      return ListView.builder(itemCount: coffees.length, itemBuilder: (context, index){
+          return CoffeeTile(coffee: coffees[index]);
       });
-      return Container();
     }
   }
 }
