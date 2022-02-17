@@ -13,6 +13,17 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void _displaySettingPanel() {
+      showModalBottomSheet(
+          context: context,
+          builder: (context) {
+            return Container(
+              padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
+              child: Text('Bottom Sheet'),
+            );
+          });
+    }
+
     return StreamProvider<List<Coffee>?>.value(
         value: DatabaseService().coffee,
         initialData: null,
@@ -36,7 +47,19 @@ class Home extends StatelessWidget {
                     label: Text(
                       "Logout",
                       style: TextStyle(color: Colors.black),
-                    ))
+                    )),
+                TextButton.icon(
+                    onPressed: () async {
+                      _displaySettingPanel();
+                    },
+                    icon: Icon(
+                      Icons.settings,
+                      color: Colors.black,
+                    ),
+                    label: Text(
+                      "",
+                      style: TextStyle(color: Colors.black),
+                    )),
               ],
             ),
             body: CoffeeList(),
