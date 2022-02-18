@@ -63,7 +63,12 @@ class Home extends StatelessWidget {
                     )),
               ],
             ),
-            body: CoffeeList(),
+            body: Container(
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('assets/coffee_bg.png'),
+                        fit: BoxFit.cover)),
+                child: CoffeeList()),
           );
         });
   }

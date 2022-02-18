@@ -1,5 +1,9 @@
+import 'package:coffee/models/user.dart';
+import 'package:coffee/service/database.dart';
 import 'package:coffee/shared/constants.dart';
+import 'package:coffee/shared/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SettingsForm extends StatefulWidget {
   const SettingsForm({Key? key}) : super(key: key);
@@ -18,64 +22,80 @@ class _SettingsFormState extends State<SettingsForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          Text(
-            'Update your coffee settings',
-            style: TextStyle(fontSize: 18.0),
-          ),
-          SizedBox(height: 20.0),
-          TextFormField(
-            decoration: textInputDecoration,
-            validator: (val) => val!.isEmpty ? "Please Enter a name" : null,
-            onChanged: (val) => setState(() {
-              _currentName = val;
-            }),
-          ),
-          SizedBox(height: 20.0),
+    final user = Provider.of<OurUser?>(context);
+    return StreamBuilder<UserData>(
+        stream: DatabaseService(uid: user!.uid).userData,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            UserData userData = snapshot.data!;
+            return Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  Text(
+                    'Update your coffee settings',
+                    style: TextStyle(fontSize: 18.0),
+                  ),
+                  SizedBox(height: 20.0),
+                  TextFormField(
+                    initialValue: userData.name,
+                    decoration: textInputDecoration,
+                    validator: (val) =>
+                        val!.isEmpty ? "Please Enter a name" : null,
+                    onChanged: (val) => setState(() {
+                      _currentName = val;
+                    }),
+                  ),
+                  SizedBox(height: 20.0),
 
-          //dorpdon
+                  //dorpdon
 
-          DropdownButtonFormField<String>(
-            decoration: textInputDecoration,
-            value: _currentSugars ?? '0',
-            items: sugars.map((sugar) {
-              return DropdownMenuItem(
-                value: sugar,
-                child: Text("$sugar sugars"),
-              );
-            }).toList(),
-            onChanged: (val) => setState(() => _currentSugars = val),
-          ),
+                  DropdownButtonFormField<String>(
+                    decoration: textInputDecoration,
+                    value: _currentSugars ?? userData.sugars,
+                    items: sugars.map((sugar) {
+                      return DropdownMenuItem(
+                        value: sugar,
+                        child: Text("$sugar sugars"),
+                      );
+                    }).toList(),
+                    onChanged: (val) => setState(() => _currentSugars = val),
+                  ),
 
-          Slider(
-            min: 100,
-            max: 900,
-            divisions: 8,
-            value: (_currentStrength ?? 100).toDouble(),
-            activeColor: Colors.brown[_currentStrength ?? 100],
-            inactiveColor: Colors.brown[_currentStrength ?? 100],
-            onChanged: (val) {
-              setState(() {
-                _currentStrength = val.round();
-              });
-            },
-          ),
-          ElevatedButton(
-              onPressed: () async {
-                print(_currentName);
-                print(_currentStrength);
-                print(_currentSugars);
-              },
-              style: ElevatedButton.styleFrom(primary: Colors.pink[400]),
-              child: Text(
-                'Update',
-                style: TextStyle(color: Colors.white),
-              ))
-        ],
-      ),
-    );
+                  Slider(
+                    min: 100,
+                    max: 900,
+                    divisions: 8,
+                    value: (_currentStrength ?? userData.strength).toDouble(),
+                    activeColor:
+                        Colors.brown[_currentStrength ?? userData.strength],
+                    inactiveColor:
+                        Colors.brown[_currentStrength ?? userData.strength],
+                    onChanged: (val) {
+                      setState(() {
+                        _currentStrength = val.round();
+                      });
+                    },
+                  ),
+                  ElevatedButton(
+                      onPressed: () async {
+                        if(_formKey.currentState!.validate()){
+                          await DatabaseService(uid: user.uid).updateUserData(_currentSugars ?? userData.sugars, _currentName ?? userData.name, _currentStrength ?? userData.strength);
+                          Navigator.pop(context);
+                        }
+                      },
+                      style:
+                          ElevatedButton.styleFrom(primary: Colors.pink[400]),
+                      child: Text(
+                        'Update',
+                        style: TextStyle(color: Colors.white),
+                      ))
+                ],
+              ),
+            );
+          } else {
+            return Loading();
+          }
+        });
   }
 }

@@ -15,6 +15,7 @@ class CoffeeTile extends StatelessWidget {
         child: ListTile(
           leading: CircleAvatar(
             radius: 25.0,
+            backgroundImage: AssetImage('assets/coffee_icon.png'),
             backgroundColor: Colors.brown[coffee.strength],
           ),
           title: Text(coffee.name),
