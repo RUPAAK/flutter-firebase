@@ -34,6 +34,9 @@ class _SettingsFormState extends State<SettingsForm> {
               _currentName = val;
             }),
           ),
+          SizedBox(height: 20.0),
+
+          //dorpdon
 
           DropdownButtonFormField<String>(
             decoration: textInputDecoration,
@@ -47,14 +50,24 @@ class _SettingsFormState extends State<SettingsForm> {
             onChanged: (val) => setState(() => _currentSugars = val),
           ),
 
-          SizedBox(height: 20.0),
-
-          //dorpdon
-
+          Slider(
+            min: 100,
+            max: 900,
+            divisions: 8,
+            value: (_currentStrength ?? 100).toDouble(),
+            activeColor: Colors.brown[_currentStrength ?? 100],
+            inactiveColor: Colors.brown[_currentStrength ?? 100],
+            onChanged: (val) {
+              setState(() {
+                _currentStrength = val.round();
+              });
+            },
+          ),
           ElevatedButton(
               onPressed: () async {
                 print(_currentName);
                 print(_currentStrength);
+                print(_currentSugars);
               },
               style: ElevatedButton.styleFrom(primary: Colors.pink[400]),
               child: Text(
